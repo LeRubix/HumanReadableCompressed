@@ -1,0 +1,63 @@
+name: John Doe
+age: 30
+email: john.doe@example.com
+
+# Address
+address:
+  street: 123 Main St
+  city: Anytown
+  state: CA
+  zip: 12345
+
+# Interests
+interests:
+  - reading
+  - hiking
+  - photography
+
+# Work Experience
+work_experience:
+  - company: Tech Corp
+    position: Software Engineer
+    years: 5
+  - company: Web Solutions Inc
+    position: Web Developer
+    years: 2
+
+# Education
+education:
+  degree: Bachelor of Science
+  major: Computer Science
+  university: State University
+  graduation_year: 2015
+
+# Skills
+skills:
+  programming_languages:
+    - Python
+    - JavaScript
+    - Java
+  frameworks:
+    - Django
+    - React
+    - Spring
+
+# Configuration
+settings:
+  theme: dark
+  notifications: true
+  language: en_US
+
+# Numeric values
+numbers:
+  integer: 42
+  float: 3.14
+  scientific: 1.23e-4
+
+# Boolean values
+flags:
+  is_active: true
+  is_admin: false
+
+# Null value
+optional_field: null
