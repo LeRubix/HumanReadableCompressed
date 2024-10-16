@@ -46,10 +46,10 @@ def write_decompressed_file(filepath, decompressed_data, file_type):
 def decompress_file(filepath):
     try:
         with open(filepath, 'rb') as f:
-            header = f.read(8)  # read the first 8 bytes (4 bytes for file type, 4 bytes for compression method)
-            file_type, compression_method = struct.unpack('4s4s', header)
-            file_type = file_type.decode('utf-8').strip('\x00').lower()  # remove any null bytes and convert to lowercase
-            compression_method = compression_method.decode('utf-8').strip('\x00')
+            header = f.read(10)  # read the first 10 bytes (5 bytes for file type, 5 bytes for compression method)
+            file_type, compression_method = struct.unpack('5s5s', header)
+            file_type = file_type.decode('utf-8').strip().lower()  # remove any spaces and convert to lowercase
+            compression_method = compression_method.decode('utf-8').strip()
 
             compressed_data = f.read()  # read the rest of the file (the compressed data)
         

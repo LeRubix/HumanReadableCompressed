@@ -20,7 +20,7 @@ class HRCApp(QWidget):
 
     def initUI(self):
         self.setWindowTitle('Human Readable Compressed')
-        self.setGeometry(300, 300, 400, 200)
+        self.setGeometry(300, 300, 450, 200)
         
         # Set the window icon
         self.setWindowIcon(QIcon('icons/hrc.ico'))
@@ -56,7 +56,7 @@ class HRCApp(QWidget):
         file_path, _ = QFileDialog.getOpenFileName(
             self,
             "Select file to compress",
-            "",
+            "",  # Consider adding a default directory
             "Supported Files (*.json *.jsonl *.yaml *.yml);;All Files (*)"
         )
         if file_path:
@@ -64,9 +64,9 @@ class HRCApp(QWidget):
                 original_size = os.path.getsize(file_path)
                 compressed_file_path = compress_file(file_path)
                 
+                # Check if compression was successful
                 if compressed_file_path is None:
-                    # Assume compression was successful but the function doesn't return the path
-                    compressed_file_path = file_path + '.hrc'
+                    raise RuntimeError("Compression failed, no file path returned.")
                 
                 if not os.path.exists(compressed_file_path):
                     raise FileNotFoundError(f"Compressed file not found: {compressed_file_path}")
@@ -83,12 +83,12 @@ class HRCApp(QWidget):
                 self.comparison_label.setText(comparison_text)
                 self.comparison_label.setTextFormat(Qt.TextFormat.RichText)
                 
-                self.open_location_btn.setVisible(True)
+                self.open_location_btn.setVisible(True)  # Only show if compression is successful
                 self.last_compressed_file = compressed_file_path
 
-                QMessageBox.information(self, "Success", "File compressed successfully!")
+                self.show_message("Success", "File compressed successfully!")  # Use helper method
             except Exception as e:
-                QMessageBox.critical(self, "Error", f"An error occurred: {str(e)}")
+                self.show_message("Error", f"An error occurred: {str(e)}")
                 self.comparison_label.setText("")
                 self.open_location_btn.setVisible(False)
 
@@ -111,17 +111,20 @@ class HRCApp(QWidget):
             else:
                 subprocess.Popen(['xdg-open', os.path.dirname(file_path)])
 
+    def show_message(self, title, message):  # New helper method
+        QMessageBox.information(self, title, message)
+
 def set_dark_theme(app):
     app.setStyle("Fusion")
     palette = QPalette()
-    palette.setColor(QPalette.ColorRole.Window, QColor(53, 53, 53))
+    palette.setColor(QPalette.ColorRole.Window, QColor(25, 25, 25))  # Change to black
     palette.setColor(QPalette.ColorRole.WindowText, Qt.GlobalColor.white)
-    palette.setColor(QPalette.ColorRole.Base, QColor(25, 25, 25))
-    palette.setColor(QPalette.ColorRole.AlternateBase, QColor(53, 53, 53))
+    palette.setColor(QPalette.ColorRole.Base, QColor(25, 25, 25))  # Change to black
+    palette.setColor(QPalette.ColorRole.AlternateBase, QColor(25, 25, 25))  # Change to black
     palette.setColor(QPalette.ColorRole.ToolTipBase, Qt.GlobalColor.white)
     palette.setColor(QPalette.ColorRole.ToolTipText, Qt.GlobalColor.white)
     palette.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.white)
-    palette.setColor(QPalette.ColorRole.Button, QColor(53, 53, 53))
+    palette.setColor(QPalette.ColorRole.Button, QColor(40, 40, 40))
     palette.setColor(QPalette.ColorRole.ButtonText, Qt.GlobalColor.white)
     palette.setColor(QPalette.ColorRole.BrightText, Qt.GlobalColor.red)
     palette.setColor(QPalette.ColorRole.Link, QColor(42, 130, 218))

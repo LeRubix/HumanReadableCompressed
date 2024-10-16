@@ -32,16 +32,21 @@ def compress_content(content, compression_method='zlib'):
     else:
         raise ValueError("Unsupported compression method")
 
+# Function to format the header string to 5 bytes
+def format_header_string(s):
+    s = s.strip()  # Remove leading/trailing spaces
+    return (s + '     ')[:5].encode('utf-8')  # Pad to 5 bytes
+
 # write the compressed content with a header indicating file type and compression method
 def write_compressed_file(filepath, compressed_data, file_type, compression_method):
     new_filepath = filepath.rsplit('.', 1)[0] + '.hrc'
     
-    # ensure file_type is exactly 4 bytes long
-    file_type = file_type.ljust(4)[:4].encode('utf-8')
-    compression_method = compression_method.ljust(4)[:4].encode('utf-8')
+    # Format file_type and compression_method to 5 bytes
+    file_type = format_header_string(file_type)
+    compression_method = format_header_string(compression_method)
     
-    # header; 4 bytes for the file type and 4 bytes for the compression method
-    header = struct.pack('4s4s', file_type, compression_method)
+    # header; 5 bytes for the file type and 5 bytes for the compression method
+    header = struct.pack('5s5s', file_type, compression_method)
     
     with open(new_filepath, 'wb') as f:
         f.write(header)
